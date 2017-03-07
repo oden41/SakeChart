@@ -3,6 +3,7 @@ package application;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import javafx.collections.FXCollections;
@@ -11,8 +12,11 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 
 public class ChartController {
 
@@ -53,9 +57,10 @@ public class ChartController {
 
 		//csvからデータ取り込み
 		Series<Double, Double> series = new Series<>();
+		ArrayList<String> nameList = new ArrayList<>();
 		try {
 			//ファイルを読み込む
-			FileReader fr = new FileReader("data.csv");
+			FileReader fr = new FileReader("data/data.csv");
 			BufferedReader br = new BufferedReader(fr);
 			//読み込んだファイルを１行ずつ処理する
 			String line;
@@ -71,8 +76,10 @@ public class ChartController {
 
 				//分割した文字を画面出力する
 				while (token.hasMoreTokens()) {
-					double nihonshudo = Double.parseDouble(token.nextToken());
+					double nihonshudo = Double.parseDouble(token.nextToken()) * (-1);
 					double sando = Double.parseDouble(token.nextToken());
+					String name = token.nextToken();
+					nameList.add(name);
 					series.getData().add(new XYChart.Data<Double, Double>(nihonshudo, sando));
 				}
 			}
@@ -87,5 +94,20 @@ public class ChartController {
 		ObservableList<XYChart.Series<Double, Double>> seriesList = FXCollections.observableArrayList();
 		seriesList.addAll(series);
 		chart.getData().addAll(seriesList);
+
+		// ToolTipを表示
+		// データをchartにセットした後でないと正しく表示されなかったため，この場所での処理
+		for (Series<Double, Double> s : chart.getData()) {
+			int index = 0;
+			for (Data<Double, Double> point : s.getData()) {
+				double x = point.getXValue().doubleValue();
+				double y = point.getYValue().doubleValue();
+				String name = nameList.get(index);
+				index++;
+				Tooltip tooltip = new Tooltip(String.format("%s \n 日本酒度：%.2f,酸度：%.2f", name, -x, y));
+				tooltip.setFont(new Font(15));
+				Tooltip.install(point.getNode(), tooltip);
+			}
+		}
 	}
 }
