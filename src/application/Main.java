@@ -25,9 +25,11 @@ public class Main extends Application {
 			ldr.setController(this);
 
 			BorderPane root = (BorderPane) FXMLLoader.load(getClass().getResource("Chart.fxml"));
-			Scene scene = new Scene(root, 800, 400);
+			Scene scene = new Scene(root, 351, 323);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
 			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
