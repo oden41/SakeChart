@@ -7,9 +7,9 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ChartController">
    <center>
-      <Pane fx:id="panel" layoutY="-10.0" prefHeight="323.0" prefWidth="351.0" BorderPane.alignment="CENTER">
+      <Pane fx:id="panel" prefHeight="300.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
-            <ScatterChart fx:id="chart" layoutX="27.0" layoutY="30.0" opacity="1" prefHeight="310.0" prefWidth="330.0">
+            <ScatterChart fx:id="chart" layoutX="-20.0" layoutY="-10.0" opacity="1" prefHeight="330.0" prefWidth="330.0">
               <xAxis>
                 <NumberAxis side="BOTTOM" fx:id="xAxis" />
               </xAxis>
