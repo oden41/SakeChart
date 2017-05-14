@@ -14,7 +14,10 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 
@@ -31,6 +34,20 @@ public class ChartController {
 
 	@FXML
 	private Pane panel;
+
+	//テーブル
+	@FXML
+	private TableView<SakeData> tableView;
+	@FXML
+	private TableColumn<SakeData, String> nameCol;
+	@FXML
+	private TableColumn<SakeData, Double> SMVCol;
+	@FXML
+	private TableColumn<SakeData, Double> acidityCol;
+	@FXML
+	private TableColumn<SakeData, String> tastyCol;
+
+	private ObservableList<SakeData> tableRecord = FXCollections.observableArrayList();
 
 	public ChartController() {
 	}
@@ -55,6 +72,11 @@ public class ChartController {
 		yAxis.setUpperBound(2.8);
 		yAxis.setTickUnit(0.2);
 
+		nameCol.setCellValueFactory(new PropertyValueFactory<SakeData, String>("name"));
+		SMVCol.setCellValueFactory(new PropertyValueFactory<SakeData, Double>("SMV"));
+		acidityCol.setCellValueFactory(new PropertyValueFactory<SakeData, Double>("acidity"));
+		tastyCol.setCellValueFactory(new PropertyValueFactory<SakeData, String>("tasty"));
+
 		//csvからデータ取り込み
 		Series<Double, Double> series = new Series<>();
 		ArrayList<String> nameList = new ArrayList<>();
@@ -76,11 +98,13 @@ public class ChartController {
 
 				//分割した文字を画面出力する
 				while (token.hasMoreTokens()) {
+					String name = token.nextToken();
 					double nihonshudo = Double.parseDouble(token.nextToken()) * (-1);
 					double sando = Double.parseDouble(token.nextToken());
-					String name = token.nextToken();
+					String tasty = token.nextToken();
 					nameList.add(name);
 					series.getData().add(new XYChart.Data<Double, Double>(nihonshudo, sando));
+					tableRecord.add(new SakeData(name, -nihonshudo, sando, tasty));
 				}
 			}
 
@@ -91,6 +115,8 @@ public class ChartController {
 			//例外発生時処理
 			ex.printStackTrace();
 		}
+
+		tableView.setItems(tableRecord);
 		ObservableList<XYChart.Series<Double, Double>> seriesList = FXCollections.observableArrayList();
 		seriesList.addAll(series);
 		chart.getData().addAll(seriesList);

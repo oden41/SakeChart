@@ -2,6 +2,8 @@
 
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.ScatterChart?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
@@ -20,4 +22,14 @@
          </children>
       </Pane>
    </center>
+   <bottom>
+      <TableView fx:id="tableView" prefHeight="150.0" prefWidth="330.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="nameCol" prefWidth="130.0" resizable="false" text="名称" />
+          <TableColumn fx:id="SMVCol" prefWidth="60.0" resizable="false" text="日本酒度" />
+            <TableColumn fx:id="acidityCol" prefWidth="50.0" resizable="false" text="酸度" />
+            <TableColumn fx:id="tastyCol" prefWidth="45.0" resizable="false" text="好み" />
+        </columns>
+      </TableView>
+   </bottom>
 </BorderPane>
